@@ -35,7 +35,7 @@ module ActiveRecord
   end
 end
 
-# Auto reload codebase if an exception is found.
+# Auto reload codebase if an exception is found since you're probably working and saving new code with a console open.
 begin
 rescue Exception
   unless reload!
