@@ -43,3 +43,27 @@ rescue Exception
   end
 end
 
+class ReverseEngineer
+  def self.filters(kind = nil)
+    call = caller.first
+    controller = call.match("(?<=controllers\/)(.*)(?=.rb)")[0].camelcase.constantize
+    action = call.match("(?<=:in `)(.*)(?=')")[0]
+    all_filters = controller._process_action_callbacks
+    all_filters = all_filters.select{|f| f.kind == kind} if kind
+    all_filters = all_filters.select{|f| f if (f.inspect.to_s.include?(action.to_s) || f.inspect.to_s.include?("@if=[]") ) }
+    Rails.logger.debug "#{kind.to_s.capitalize} Filters:"
+    Rails.logger.debug all_filters.map(&:filter)
+  end
+ 
+  def self.before_filters
+    filters(:before)
+  end
+ 
+  def self.after_filters
+    filters(:after)
+  end
+ 
+  def self.around_filters
+    filters(:around)
+  end
+end
