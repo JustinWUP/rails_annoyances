@@ -44,6 +44,10 @@ rescue Exception
 end
 
 class ReverseEngineer
+
+  # Filters Methods tell you all the filters running on your methods
+  # Props to @ScottWB for portions of this code 
+  # https://gist.github.com/scottwb/1851142
   def self.filters(kind = nil)
     call = caller.first
     controller = call.match("(?<=controllers\/)(.*)(?=.rb)")[0].camelcase.constantize
